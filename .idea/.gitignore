@@ -1,0 +1,10 @@
+# Default ignored files
+/workspace.xml
+.idea/
+/description.html
+/encodings.xml
+/misc.xml
+/modules.xml
+/project-template.xml
+/vcs.xml
+/libraries/lib.xml
