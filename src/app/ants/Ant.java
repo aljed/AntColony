@@ -9,6 +9,8 @@ class Ant
 
     ArrayList<Pair<Vertex, Edge>> TraverseGraph(Vertex startingVertex, Vertex endVertex)
     {
+        path.clear();
+
         Vertex currentVertex = startingVertex;
         int edgesTraversed = 0;
 
@@ -16,13 +18,16 @@ class Ant
 
             ///TODO: Optimization. This sum can be saved model-wide, for a single-pass. It won't change for different ants until we update pheromone weights.
             double edgesSum =
-                    currentVertex.getConnectedVertices().stream().mapToDouble(pair -> pair.getValue().getPheromones()).sum();
+                    currentVertex.getConnectedVertices().stream().mapToDouble(pair -> pair.getValue().getPheromones() * pair.getValue().getWeight()).sum();
             double randomUniformWeightedDouble = ModelParameters.randomGenerator.nextDouble() * edgesSum;
 
             Pair<Vertex, Edge> nextVertexEdge = null;
             for (Pair<Vertex, Edge> e : currentVertex.getConnectedVertices()) {
-                if (randomUniformWeightedDouble < e.getValue().getPheromones()) nextVertexEdge = e;
-                else randomUniformWeightedDouble -= e.getValue().getPheromones();
+                double treshold = e.getValue().getPheromones() * e.getValue().getWeight();
+                if (randomUniformWeightedDouble <= treshold) {
+                    nextVertexEdge = e;
+                    break;
+                } else randomUniformWeightedDouble -= e.getValue().getPheromones() * e.getValue().getWeight();
             }
             assert (nextVertexEdge != null);
             path.add(nextVertexEdge);

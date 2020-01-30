@@ -3,7 +3,7 @@ package app.ants;
 class Edge
 {
     // Total number of pheromones accumulated over evolution. Modified by Colony.
-    private double pheromones = 0.0;
+    private double pheromones = 1.0;
     // Pheromones _deposited_ in current Colony Traversal. Modified by Ant.
     private double pheromoneDelta = 0.0;
     // Length of the edge.

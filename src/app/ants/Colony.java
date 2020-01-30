@@ -4,12 +4,14 @@ import java.util.ArrayList;
 
 public class Colony
 {
-    private ArrayList<Ant> colony = new ArrayList<>();
+    private ArrayList<Ant> colony = new ArrayList<>(ModelParameters.NUMBER_OF_ANTS);
     private Graph graph;
 
     public Colony(Graph graph)
     {
         this.graph = graph;
+        int ants = ModelParameters.NUMBER_OF_ANTS;
+        while (ants-- > 0) colony.add(new Ant());
     }
 
     ArrayList<Ant> GeneratePathsTaken(Vertex start, Vertex end)

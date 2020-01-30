@@ -59,6 +59,8 @@ public class View {
         Vertex startVertex = null;
         Vertex endVertex = null;
 
+        // var vertexStartTown = graph.getVertices().stream().filter( vertex -> vertex.getName().equals(startTown)).findFirst().get();
+
         for (int i = 0; i < graph.getVertices().size(); ++i) {
             if(graph.getVertices().get(i).getName().equals(startTown)) {
                 startVertex = graph.getVertices().get(i);
