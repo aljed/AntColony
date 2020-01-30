@@ -12,19 +12,25 @@ class Ant
         path.clear();
 
         Vertex currentVertex = startingVertex;
+        Edge lastEdge = null;
         int edgesTraversed = 0;
 
         while ((currentVertex != endVertex) && (edgesTraversed++ < ModelParameters.LONGEST_PATH_CUT_OFF_POINT)) {
 
-            ///TODO: Optimization. This sum can be saved model-wide, for a single-pass. It won't change for different ants until we update pheromone weights.
-            double edgesSum =
-                    currentVertex.getConnectedVertices().stream().mapToDouble(pair -> pair.getValue().getPheromones() * pair.getValue().getWeight()).sum();
+            Edge finalLastEdge = lastEdge;
+            double edgesSum = currentVertex.getConnectedVertices().stream().mapToDouble(pair ->
+            {
+                if (pair.getValue() != finalLastEdge)
+                    return pair.getValue().getPheromones() * pair.getValue().getWeight();
+                else return 0.0;
+            }).sum();
             double randomUniformWeightedDouble = ModelParameters.randomGenerator.nextDouble() * edgesSum;
 
             Pair<Vertex, Edge> nextVertexEdge = null;
             for (Pair<Vertex, Edge> e : currentVertex.getConnectedVertices()) {
-                double treshold = e.getValue().getPheromones() * e.getValue().getWeight();
-                if (randomUniformWeightedDouble <= treshold) {
+                if (e.getValue() == lastEdge) continue;
+                double threshold = e.getValue().getPheromones() * e.getValue().getWeight();
+                if (randomUniformWeightedDouble <= threshold) {
                     nextVertexEdge = e;
                     break;
                 } else randomUniformWeightedDouble -= e.getValue().getPheromones() * e.getValue().getWeight();
@@ -32,14 +38,15 @@ class Ant
             assert (nextVertexEdge != null);
             path.add(nextVertexEdge);
             currentVertex = nextVertexEdge.getKey();
+            lastEdge = nextVertexEdge.getValue();
         }
 
         // Spread pheromones over path taken.
         double totalPathLength = path.stream().mapToDouble(pair -> pair.getValue().getWeight()).sum();
         if (edgesTraversed < ModelParameters.LONGEST_PATH_CUT_OFF_POINT) {   // if the ant traveled over sufficiently large amount of vertices, we assume the pheromones were so weak we can ignore them
             for (var pair : path) {
-                //pair.getValue().pheromoneDelta += ModelParameters.PHEROMONE_STRENGTH_CONSTANT / totalPathLength;
                 pair.getValue().setPheromoneDelta(pair.getValue().getPheromoneDelta() + ModelParameters.PHEROMONE_STRENGTH_CONSTANT / totalPathLength);
+                int i = 4;
             }
         }
         return path;

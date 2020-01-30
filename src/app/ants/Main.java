@@ -72,21 +72,43 @@ public class Main extends Application
             System.out.println();
         }
 
+        ModelParameters.NUMBER_OF_ANTS = 10;
         colony = new Colony(graph);
-        ModelParameters.NUMBER_OF_ANTS = 1000;
-        for (int i = 0; i < 10; ++i) {
-            int j = 0;
-            for (; j < 100; ++j) {
-                colony.GeneratePathsTaken(start, end);
-                colony.ModifyPheromones();
-            }
+
+        for (int i = 0; i < 100000; ++i) {
             var ants2 = colony.GeneratePathsTaken(start, end);
-            int percentage = 0;
-            for (Ant ant : ants2)
-                if (ant.path.get(ant.path.size() - 1).getKey().equals(start)) {
-                    ++percentage;
+            colony.ModifyPheromones();
+            if (i % 1000 == 0) {
+
+//                for ( Edge e : graph.getEdges() )
+//                {
+//                    System.out.println(e.getWeight() + ", " + e.getPheromones() + ", " + e.getPheromoneDelta());
+//                }
+
+                int percentage = 0;
+                // int length_shortest = ModelParameters.LONGEST_PATH_CUT_OFF_POINT;
+                int percentage_shortest = 0;
+                double shortest_weight = Double.MAX_VALUE;
+                double weight_sum = 0.0;
+                for (Ant ant : ants2) {
+                    if (ant.path.get(ant.path.size() - 1).getKey().equals(end)) {
+                        ++percentage;
+                    }
+                    double weight = ant.path.stream().mapToDouble(pair -> pair.getValue().getWeight()).sum();
+                    weight_sum += weight;
+                    shortest_weight = Math.min(shortest_weight, weight);
                 }
-            System.out.println("# of ants founding path " + percentage + " in generation " + j * i);
+                for (Ant ant : ants2) {
+                    double weight = ant.path.stream().mapToDouble(pair -> pair.getValue().getWeight()).sum();
+                    if (weight == shortest_weight) ++percentage_shortest;
+                }
+
+                // System.out.println("% of ants finding path " + percentage  + " in generation " + i);
+                System.out.println("Shortest path is " + shortest_weight);
+                // System.out.println("% of ants traveling shortest path " + percentage_shortest );
+                System.out.println("All paths weighted sum is " + weight_sum / ModelParameters.NUMBER_OF_ANTS);
+            }
+
 
         }
 //            colony.GeneratePathsTaken(start, end);

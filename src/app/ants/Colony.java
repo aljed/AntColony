@@ -7,7 +7,7 @@ public class Colony
     private ArrayList<Ant> colony = new ArrayList<>(ModelParameters.NUMBER_OF_ANTS);
     private Graph graph;
 
-    public Colony(Graph graph)
+    Colony(Graph graph)
     {
         this.graph = graph;
         int ants = ModelParameters.NUMBER_OF_ANTS;
