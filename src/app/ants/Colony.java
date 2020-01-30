@@ -24,14 +24,14 @@ public class Colony
     Graph ModifyPheromones()
     {
         for (Edge e : graph.getEdges()) {
-            e.pheromones = (1.0 - ModelParameters.PHEROMONE_EVAPORATION_RATE) * e.pheromones + e.pheromoneDelta;
+            e.setPheromones((1.0 - ModelParameters.PHEROMONE_EVAPORATION_RATE) * e.getPheromones() + e.getPheromoneDelta());
         }
 
         return graph;
     }
 
-    public void setGraph(Graph graph)
-    {
-        this.graph = graph;
-    }
+//    public void setGraph(Graph graph)
+//    {
+//        this.graph = graph;
+//    }
 }

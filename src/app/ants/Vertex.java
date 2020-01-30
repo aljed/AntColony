@@ -1,7 +1,6 @@
 package app.ants;
 
 import javafx.util.Pair;
-
 import java.util.ArrayList;
 
 class Vertex
@@ -12,47 +11,39 @@ class Vertex
 
     private ArrayList<Pair<Vertex, Edge>> connectedVertices;
 
-//    void setName(String name)
-//    {
-//        this.name = name;
-//    }
+    public Vertex(String name, double x, double y) {
+        this.x = x;
+        this.y = y;
+        this.name = name;
+        connectedVertices = new ArrayList<>();
+    }
 
-    String getName()
+    public String getName()
     {
         return name;
     }
 
-//    void setY(double y)
-//    {
-//        this.y = y;
-//    }
-
-    double getY()
+    public double getY()
     {
         return y;
     }
 
-//    void setX(double x)
-//    {
-//        this.x = x;
-//    }
-
-    double getX()
+    public double getX()
     {
         return x;
     }
 
     /**
-     * @return Kolekcja par (Wierzchołek w, Krawędź k) połączonych z danym wierzchołkiem.
-     * e jest krawędzią między (k, this)
+     * @return Collection of pairs (Vertex v, Edge e) connected to given vertex.
+     * 'v' is a Vertex on the other side of 'e'
      */
-    ArrayList<Pair<Vertex, Edge>> ConnectedVertices()
+    public ArrayList<Pair<Vertex, Edge>> getConnectedVertices()
     {
         return connectedVertices;
     }
 
-    /// Called only from Edge constructor. Which is kind of smelly. //TODO: Should probably be called from Graph, as it's Graph's responsibility to create model.  
-    void addConnectedVertexOverEdge(Vertex b, Edge edge)
+    //TODO: Should probably be called from Graph, as it's Graph's responsibility to create model + called only from Edge constructor
+    public void addConnectedVertexOverEdge(Vertex b, Edge edge)
     {
         connectedVertices.add(new Pair<>(b, edge));
     }

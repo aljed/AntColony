@@ -20,27 +20,53 @@ public class Main extends Application {
         graph.createEdgesFromFile("janosUSCAedges.txt");
         View view = new View(graph);
         view.initializeView(primaryStage);
-        view.moveAnt(view.getRoot(), "Calgary", "SaltLakeCity");
-        view.moveAnt(view.getRoot(), "Calgary", "SaltLakeCity");
-
-        view.moveAnt(view.getRoot(), "ElPaso", "Dallas");
-        view.moveAnt(view.getRoot(), "Charlotte", "Tampa");
-
+//        view.moveAnt("Calgary", "SaltLakeCity");
+//        Thread.sleep(200);
+//        view.moveAnt("Calgary", "SaltLakeCity");
+//        view.moveAnt("ElPaso", "Dallas");
+//        view.moveAnt("Charlotte", "Tampa");
+//        for (int i = 0; i < 100; ++i) {
+//            view.moveAnt("Calgary", "SaltLakeCity");
+//            //Thread.sleep(100);
+//        }
 
         /**
          * Sample usage.
          */
-        Vertex start = new Vertex();
-        Vertex end = new Vertex();
+        //TEST:
+        String startTown = "Vancouver";
+        String endTown = "Miami";
 
+        Vertex start = null;
+        Vertex end = null;
+
+        //search for vertices with given names
+        for (int i = 0; i < graph.getVertices().size(); ++i) {
+            if (graph.getVertices().get(i).getName().equals(startTown)) {
+                start = graph.getVertices().get(i);
+            } else if (graph.getVertices().get(i).getName().equals(endTown)) {
+                end = graph.getVertices().get(i);
+            }
+        }
+
+        //perform
         Colony colony = new Colony(graph);
-        for (int i = 0; i < 999; ++i) {
+        for (int i = 0; i < 1000; ++i) {
             colony.GeneratePathsTaken(start, end);
             colony.ModifyPheromones();
         }
         ArrayList<Pair<Vertex, Edge>> pathTakenByFifthAntAfter1000Generations =
                 colony.GeneratePathsTaken(start, end).get(5).path;
-        // see: Vertex.ConnectedVertices() documentation.
+        for (Pair<Vertex, Edge> p : pathTakenByFifthAntAfter1000Generations) {
+            System.out.println(p.getKey().getName());
+        }
+//        // see: Vertex.ConnectedVertices() documentation.
+
+//        Colony colony = new Colony(graph);
+//        for (int i = 0; i < 1000; ++i) {
+//            colony.GeneratePathsTaken(start, end);
+//            colony.ModifyPheromones();
+//        }
 
     }
 

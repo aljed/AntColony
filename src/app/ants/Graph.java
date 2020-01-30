@@ -24,10 +24,7 @@ class Graph
         File file = new File("src/" + fileName);
         Scanner scanner = new Scanner(file);
         while (scanner.hasNext()) {
-            Vertex newV = new Vertex();
-            newV.setName(scanner.next());
-            newV.setX(Double.parseDouble(scanner.next()));
-            newV.setY(Double.parseDouble(scanner.next()));
+            Vertex newV = new Vertex(scanner.next(), Double.parseDouble(scanner.next()), Double.parseDouble(scanner.next()));
             vertices.add(newV);
         }
         scanner.close();
@@ -38,9 +35,20 @@ class Graph
         File file = new File("src/" + fileName);
         Scanner scanner = new Scanner(file);
         while (scanner.hasNext()) {
-            Edge newE = new Edge();
-            newE.setA(scanner.next());
-            newE.setB(scanner.next());
+            Vertex vA = null;
+            Vertex vB = null;
+            String a = scanner.next();
+            String b = scanner.next();
+
+            //Searching for vertices with names got from file
+            for (int i = 0; i < vertices.size(); ++i) {
+                if (vertices.get(i).getName().equals(a)) {
+                    vA = vertices.get(i);
+                } else if (vertices.get(i).getName().equals(b)) {
+                    vB = vertices.get(i);
+                }
+            }
+            Edge newE = new Edge(vA, vB);
             edges.add(newE);
         }
         scanner.close();
@@ -48,7 +56,8 @@ class Graph
 
     void ResetPathCount()
     {
-        for (Edge e : edges)
-            e.pheromoneDelta = 0.0;
+        for (int i = 0; i < edges.size(); ++i) {
+            edges.get(i).setPheromoneDelta(0.0);
+        }
     }
 }

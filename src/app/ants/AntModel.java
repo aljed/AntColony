@@ -10,7 +10,7 @@ public class AntModel {
     AntModel(Vertex pos)
     {
         position = pos;
-        ant = new Circle(7.0f, Color.RED);
+        ant = new Circle(4.0f, Color.RED);
     }
 
     Vertex getPosition()

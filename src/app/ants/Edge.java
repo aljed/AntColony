@@ -2,21 +2,21 @@ package app.ants;
 
 class Edge
 {
-    /// Total number of pheromones accumulated over evolution. Modified by Colony.
-    double pheromones = 0.0;
-    /// Pheromones _deposited_ in current Colony Traversal. Modified by Ant.
-    double pheromoneDelta = 0.0;
+    // Total number of pheromones accumulated over evolution. Modified by Colony.
+    private double pheromones = 0.0;
+    // Pheromones _deposited_ in current Colony Traversal. Modified by Ant.
+    private double pheromoneDelta = 0.0;
     // Length of the edge.
-    double weight = 1.0;
+    private double weight = 1.0;
 
     ///TODO: Edge connects Vertices. Not strings.
     private Vertex a;
     private Vertex b;
 
-    Edge(Vertex a, Vertex b)
+    public Edge(Vertex a, Vertex b)
     {
-        var X_distance = a.getX() - b.getX();
-        var Y_distance = a.getY() - b.getY();
+        double X_distance = a.getX() - b.getX();
+        double Y_distance = a.getY() - b.getY();
         weight = Math.sqrt(X_distance * X_distance + Y_distance * Y_distance);
 
         this.a = a;
@@ -26,28 +26,31 @@ class Edge
         b.addConnectedVertexOverEdge(a, this);
     }
 
-    ////TODO: IMMUTABLE! No need to ever change it. Use constructor instead.
-//    void setA(String a) {
-//        this.a = a;
-//    }
+    public double getPheromones() {
+        return pheromones;
+    }
 
-    /**
-     *
-     */
-    // double pheromonoe;
+    public void setPheromones(double pheromones) {
+        this.pheromones = pheromones;
+    }
 
-    Vertex getA()
-    {
+    public double getPheromoneDelta() {
+        return pheromoneDelta;
+    }
+
+    public void setPheromoneDelta(double pheromoneDelta) {
+        this.pheromoneDelta = pheromoneDelta;
+    }
+
+    public double getWeight() {
+        return weight;
+    }
+
+    public Vertex getA() {
         return a;
     }
 
-    ////TODO: IMMUTABLE! No need to ever change it. Use constructor instead.
-//    void setB(String b) {
-//        this.b = b;
-//    }
-
-    Vertex getB()
-    {
+    public Vertex getB() {
         return b;
     }
 }
