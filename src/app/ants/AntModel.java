@@ -1,22 +1,20 @@
 package app.ants;
 
-import javafx.animation.PathTransition;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
-import javafx.util.Duration;
 
 public class AntModel {
-    private Vertex position; // pozycja startowa (not null) + pozycja koncowa (may be null)
-    private Vertex endPosition;
+    private Vertex position; // pozycja startowa (not null) + pozycja koncowa (may be null) private Vertex endPosition;
     private Circle ant;
 
-    public AntModel(Vertex pos) {
+    AntModel(Vertex pos)
+    {
         position = pos;
         ant = new Circle(7.0f, Color.RED);
     }
 
-    public Vertex getPosition() {
+    Vertex getPosition()
+    {
         return position;
     }
 
@@ -24,7 +22,8 @@ public class AntModel {
         this.position = position;
     }
 
-    public Circle getAnt() {
+    Circle getAnt()
+    {
         return ant;
     }
 

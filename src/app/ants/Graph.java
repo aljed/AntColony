@@ -4,19 +4,23 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Graph {
+class Graph
+{
     private ArrayList<Vertex> vertices = new ArrayList<>();
     private ArrayList<Edge> edges = new ArrayList<>();
 
-    public ArrayList<Vertex> getVertices() {
+    ArrayList<Vertex> getVertices()
+    {
         return vertices;
     }
 
-    public ArrayList<Edge> getEdges() {
+    ArrayList<Edge> getEdges()
+    {
         return edges;
     }
 
-    public void createVerticesFromFile(String fileName) throws FileNotFoundException {
+    void createVerticesFromFile(String fileName) throws FileNotFoundException
+    {
         File file = new File("src/" + fileName);
         Scanner scanner = new Scanner(file);
         while (scanner.hasNext()) {
@@ -29,7 +33,8 @@ public class Graph {
         scanner.close();
     }
 
-    public void createEdgesFromFile(String fileName) throws FileNotFoundException {
+    void createEdgesFromFile(String fileName) throws FileNotFoundException
+    {
         File file = new File("src/" + fileName);
         Scanner scanner = new Scanner(file);
         while (scanner.hasNext()) {
@@ -41,4 +46,9 @@ public class Graph {
         scanner.close();
     }
 
+    void ResetPathCount()
+    {
+        for (Edge e : edges)
+            e.pheromoneDelta = 0.0;
+    }
 }
