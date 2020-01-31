@@ -18,22 +18,21 @@ class Ant
         while ((currentVertex != endVertex) && (edgesTraversed++ < ModelParameters.LONGEST_PATH_CUT_OFF_POINT)) {
 
             Edge finalLastEdge = lastEdge;
-            double edgesSum = currentVertex.getConnectedVertices().stream().mapToDouble(pair ->
+            double edgesAttractivenessSum = currentVertex.getConnectedVertices().stream().mapToDouble(pair ->
             {
-                if (pair.getValue() != finalLastEdge)
-                    return pair.getValue().getPheromones() * pair.getValue().getWeight();
+                if (pair.getValue() != finalLastEdge) return pair.getValue().getAttractiveness();
                 else return 0.0;
             }).sum();
-            double randomUniformWeightedDouble = ModelParameters.randomGenerator.nextDouble() * edgesSum;
+            double randomUniformWeightedDouble = ModelParameters.randomGenerator.nextDouble() * edgesAttractivenessSum;
 
             Pair<Vertex, Edge> nextVertexEdge = null;
             for (Pair<Vertex, Edge> e : currentVertex.getConnectedVertices()) {
                 if (e.getValue() == lastEdge) continue;
-                double threshold = e.getValue().getPheromones() * e.getValue().getWeight();
+                double threshold = e.getValue().getAttractiveness();
                 if (randomUniformWeightedDouble <= threshold) {
                     nextVertexEdge = e;
                     break;
-                } else randomUniformWeightedDouble -= e.getValue().getPheromones() * e.getValue().getWeight();
+                } else randomUniformWeightedDouble -= threshold;
             }
             assert (nextVertexEdge != null);
             path.add(nextVertexEdge);

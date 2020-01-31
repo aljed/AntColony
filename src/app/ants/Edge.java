@@ -26,6 +26,11 @@ class Edge
         b.addConnectedVertexOverEdge(a, this);
     }
 
+    double getAttractiveness()
+    {
+        return pheromones * (1.0 / weight);
+    }
+
     public double getPheromones() {
         return pheromones;
     }

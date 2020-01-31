@@ -5,6 +5,7 @@ import javafx.stage.Stage;
 import javafx.util.Pair;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Main extends Application
 {
@@ -72,13 +73,14 @@ public class Main extends Application
             System.out.println();
         }
 
-        ModelParameters.NUMBER_OF_ANTS = 10;
+        ModelParameters.NUMBER_OF_ANTS = 50;
+        // ModelParameters.randomGenerator.setSeed(-1670853514L);
         colony = new Colony(graph);
 
-        for (int i = 0; i < 100000; ++i) {
+        for (int i = 0; i <= 2000; ++i) {
             var ants2 = colony.GeneratePathsTaken(start, end);
             colony.ModifyPheromones();
-            if (i % 1000 == 0) {
+            if (i % 100 == 0) {
 
 //                for ( Edge e : graph.getEdges() )
 //                {
@@ -106,7 +108,7 @@ public class Main extends Application
                 // System.out.println("% of ants finding path " + percentage  + " in generation " + i);
                 System.out.println("Shortest path is " + shortest_weight);
                 // System.out.println("% of ants traveling shortest path " + percentage_shortest );
-                System.out.println("All paths weighted sum is " + weight_sum / ModelParameters.NUMBER_OF_ANTS);
+                System.out.println(weight_sum / ModelParameters.NUMBER_OF_ANTS);
             }
 
 
