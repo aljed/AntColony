@@ -14,7 +14,7 @@ public class View {
     private Graph graph;
     private Pane root = new Pane();
     //private ArrayList<Circle> vModels = new ArrayList<>();
-    private ArrayList<Line> eModels = new ArrayList<>();
+    //private ArrayList<Line> eModels = new ArrayList<>();
 
     public View(Graph graph) {
         this.graph = graph;
@@ -44,7 +44,7 @@ public class View {
             line.setEndY(e.getB().getY());
 
             root.getChildren().add(line);
-            eModels.add(line);
+            //eModels.add(line);
         }
 
         Scene scene = new Scene(root, 800, 800, Color.WHITESMOKE);
@@ -55,11 +55,9 @@ public class View {
         stage.show();
     }
 
-    public void moveAnt(String startTown, String endTown) {
+    PathTransition moveAnt(String startTown, String endTown) {
         Vertex startVertex = null;
         Vertex endVertex = null;
-
-        // var vertexStartTown = graph.getVertices().stream().filter( vertex -> vertex.getName().equals(startTown)).findFirst().get();
 
         for (int i = 0; i < graph.getVertices().size(); ++i) {
             if(graph.getVertices().get(i).getName().equals(startTown)) {
@@ -82,13 +80,11 @@ public class View {
         path.setEndX(endVertex.getX());
         path.setEndY(endVertex.getY());
 
-        // a.setPosition(endVertex);
-
         PathTransition transition = new PathTransition();
         transition.setNode(a.getAnt());
-        transition.setDuration(Duration.seconds(2));
+        transition.setDuration(Duration.millis(400));
         transition.setPath(path);
-        transition.setCycleCount(1); // PathTransition.INDEFINITE);
-        transition.play();
+        transition.setCycleCount(1);
+        return transition;
     }
 }

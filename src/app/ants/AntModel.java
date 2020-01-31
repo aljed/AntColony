@@ -30,19 +30,4 @@ public class AntModel {
     public void setAnt(Circle ant) {
         this.ant = ant;
     }
-
-//    public void animateOnce() {
-//        Line path = new Line();
-//        path.setStartX(startVertex.getX());
-//        path.setStartY(startVertex.getY());
-//        path.setEndX(endVertex.getX());
-//        path.setEndY(endVertex.getY());
-//
-//        PathTransition transition = new PathTransition();
-//        transition.setNode(a.getAnt());
-//        transition.setDuration(Duration.seconds(2));
-//        transition.setPath(path);
-//        transition.setCycleCount(1); // PathTransition.INDEFINITE);
-//        transition.play();
-//    }
 }

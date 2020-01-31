@@ -18,21 +18,22 @@ class Ant
         while ((currentVertex != endVertex) && (edgesTraversed++ < ModelParameters.LONGEST_PATH_CUT_OFF_POINT)) {
 
             Edge finalLastEdge = lastEdge;
-            double edgesAttractivenessSum = currentVertex.getConnectedVertices().stream().mapToDouble(pair ->
+            double edgesSum = currentVertex.getConnectedVertices().stream().mapToDouble(pair ->
             {
-                if (pair.getValue() != finalLastEdge) return pair.getValue().getAttractiveness();
+                if (pair.getValue() != finalLastEdge)
+                    return pair.getValue().getPheromones() * pair.getValue().getWeight();
                 else return 0.0;
             }).sum();
-            double randomUniformWeightedDouble = ModelParameters.randomGenerator.nextDouble() * edgesAttractivenessSum;
+            double randomUniformWeightedDouble = ModelParameters.randomGenerator.nextDouble() * edgesSum;
 
             Pair<Vertex, Edge> nextVertexEdge = null;
-            for (Pair<Vertex, Edge> e : currentVertex.getConnectedVertices()) {
-                if (e.getValue() == lastEdge) continue;
-                double threshold = e.getValue().getAttractiveness();
+            for (int i = 0; i < currentVertex.getConnectedVertices().size(); ++i) {
+                if (currentVertex.getConnectedVertices().get(i).getValue() == lastEdge) continue;
+                double threshold = currentVertex.getConnectedVertices().get(i).getValue().getPheromones() * currentVertex.getConnectedVertices().get(i).getValue().getWeight();
                 if (randomUniformWeightedDouble <= threshold) {
-                    nextVertexEdge = e;
+                    nextVertexEdge = currentVertex.getConnectedVertices().get(i);
                     break;
-                } else randomUniformWeightedDouble -= threshold;
+                } else randomUniformWeightedDouble -= currentVertex.getConnectedVertices().get(i).getValue().getPheromones() * currentVertex.getConnectedVertices().get(i).getValue().getWeight();
             }
             assert (nextVertexEdge != null);
             path.add(nextVertexEdge);
@@ -43,12 +44,10 @@ class Ant
         // Spread pheromones over path taken.
         double totalPathLength = path.stream().mapToDouble(pair -> pair.getValue().getWeight()).sum();
         if (edgesTraversed < ModelParameters.LONGEST_PATH_CUT_OFF_POINT) {   // if the ant traveled over sufficiently large amount of vertices, we assume the pheromones were so weak we can ignore them
-            for (var pair : path) {
-                pair.getValue().setPheromoneDelta(pair.getValue().getPheromoneDelta() + ModelParameters.PHEROMONE_STRENGTH_CONSTANT / totalPathLength);
-                int i = 4;
+            for (int i = 0; i < path.size(); ++i) {
+                path.get(i).getValue().setPheromoneDelta(path.get(i).getValue().getPheromoneDelta() + ModelParameters.PHEROMONE_STRENGTH_CONSTANT / totalPathLength);
             }
         }
         return path;
     }
-
 }

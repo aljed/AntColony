@@ -1,11 +1,14 @@
 package app.ants;
 
+import javafx.animation.PathTransition;
+import javafx.animation.PauseTransition;
+import javafx.animation.SequentialTransition;
 import javafx.application.Application;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import javafx.util.Pair;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 public class Main extends Application
 {
@@ -53,82 +56,55 @@ public class Main extends Application
             }
         }
 
-        System.out.println(start.getName());
-        System.out.println(end.getName());
-
-//        for ( var e : start.getConnectedVertices() )
-//            System.out.println(e.getKey().getName());
-
-//        for ( Vertex v : graph.getVertices() )
-//            System.out.println(v.getName());
-//
-//        if ( true ) return;
-
-        ModelParameters.NUMBER_OF_ANTS = 9;
+        ModelParameters.NUMBER_OF_ANTS = 10;
         Colony colony = new Colony(graph);
-        var ants = colony.GeneratePathsTaken(start, end);
-        for (var ant : ants) {
-            for (var pair : ant.path)
-                System.out.print(pair.getKey().getName() + ", ");
-            System.out.println();
-        }
-
-        ModelParameters.NUMBER_OF_ANTS = 50;
-        // ModelParameters.randomGenerator.setSeed(-1670853514L);
-        colony = new Colony(graph);
-
-        for (int i = 0; i <= 2000; ++i) {
-            var ants2 = colony.GeneratePathsTaken(start, end);
-            colony.ModifyPheromones();
-            if (i % 100 == 0) {
-
-//                for ( Edge e : graph.getEdges() )
-//                {
-//                    System.out.println(e.getWeight() + ", " + e.getPheromones() + ", " + e.getPheromoneDelta());
-//                }
-
-                int percentage = 0;
-                // int length_shortest = ModelParameters.LONGEST_PATH_CUT_OFF_POINT;
-                int percentage_shortest = 0;
-                double shortest_weight = Double.MAX_VALUE;
-                double weight_sum = 0.0;
-                for (Ant ant : ants2) {
-                    if (ant.path.get(ant.path.size() - 1).getKey().equals(end)) {
-                        ++percentage;
+        int delay = 4000;
+        //how many generations
+        for (int i = 0; i < 20000; ++i) {
+            var antsGeneration = colony.GeneratePathsTaken(start, end);
+            if (i % 1000 == 0) {
+            //every ant of current generation
+                for (var ant : antsGeneration) {
+                    SequentialTransition st = new SequentialTransition();
+                    st.getChildren().add(new PauseTransition(Duration.millis(delay)));
+                    //setting animation path for current ant
+                    for (int j = 0; j < ant.path.size() - 1; ++j) {
+                        //System.out.print(ant.path.get(j).getKey().getName() + ", ");
+                        PathTransition pt = view.moveAnt(ant.path.get(j).getKey().getName(), ant.path.get(j + 1).getKey().getName());
+                        st.getChildren().add(pt);
                     }
-                    double weight = ant.path.stream().mapToDouble(pair -> pair.getValue().getWeight()).sum();
-                    weight_sum += weight;
-                    shortest_weight = Math.min(shortest_weight, weight);
+                    st.setCycleCount(1);
+                    st.play();
                 }
-                for (Ant ant : ants2) {
-                    double weight = ant.path.stream().mapToDouble(pair -> pair.getValue().getWeight()).sum();
-                    if (weight == shortest_weight) ++percentage_shortest;
-                }
-
-                // System.out.println("% of ants finding path " + percentage  + " in generation " + i);
-                System.out.println("Shortest path is " + shortest_weight);
-                // System.out.println("% of ants traveling shortest path " + percentage_shortest );
-                System.out.println(weight_sum / ModelParameters.NUMBER_OF_ANTS);
+                delay += 500;
             }
+            colony.ModifyPheromones();
 
-
+            //SOME STATISTICS not affecting running program
+//            if (i % 1000 == 0) {
+//                int percentage = 0;
+//                int percentage_shortest = 0;
+//                double shortest_weight = Double.MAX_VALUE;
+//                double weight_sum = 0.0;
+//                for (Ant ant : antsGeneration) {
+//                    if (ant.path.get(ant.path.size() - 1).getKey().equals(end)) {
+//                        ++percentage;
+//                    }
+//                    double weight = ant.path.stream().mapToDouble(pair -> pair.getValue().getWeight()).sum();
+//                    weight_sum += weight;
+//                    shortest_weight = Math.min(shortest_weight, weight);
+//                }
+//                for (Ant ant : antsGeneration) {
+//                    double weight = ant.path.stream().mapToDouble(pair -> pair.getValue().getWeight()).sum();
+//                    if (weight == shortest_weight) ++percentage_shortest;
+//                }
+//
+//                // System.out.println("% of ants finding path " + percentage  + " in generation " + i);
+//                System.out.println("Shortest path is " + shortest_weight);
+//                // System.out.println("% of ants traveling shortest path " + percentage_shortest );
+//                System.out.println("All paths weighted sum is " + weight_sum / ModelParameters.NUMBER_OF_ANTS);
+//            } //STATISTICS
         }
-//            colony.GeneratePathsTaken(start, end);
-//            colony.ModifyPheromones();
-//        }
-
-        //perform
-//        Colony colony = new Colony(graph);
-//        for (int i = 0; i < 1000; ++i) {
-//            colony.GeneratePathsTaken(start, end);
-//            colony.ModifyPheromones();
-//        }
-//        ArrayList<Pair<Vertex, Edge>> pathTakenByFifthAntAfter1000Generations =
-//                colony.GeneratePathsTaken(start, end).get(5).path;
-//        for (Pair<Vertex, Edge> p : pathTakenByFifthAntAfter1000Generations) {
-//            System.out.println(p.getKey().getName());
-//        }
-
     }
 
 }
