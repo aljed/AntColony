@@ -30,9 +30,4 @@ public class Colony
         }
         return graph;
     }
-
-//    public void setGraph(Graph graph)
-//    {
-//        this.graph = graph;
-//    }
 }

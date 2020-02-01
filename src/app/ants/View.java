@@ -13,15 +13,9 @@ import java.util.ArrayList;
 public class View {
     private Graph graph;
     private Pane root = new Pane();
-    //private ArrayList<Circle> vModels = new ArrayList<>();
-    //private ArrayList<Line> eModels = new ArrayList<>();
 
     public View(Graph graph) {
         this.graph = graph;
-    }
-
-    public Pane getRoot() {
-        return root;
     }
 
     public void initializeView(Stage stage) {
@@ -44,7 +38,6 @@ public class View {
             line.setEndY(e.getB().getY());
 
             root.getChildren().add(line);
-            //eModels.add(line);
         }
 
         Scene scene = new Scene(root, 800, 800, Color.WHITESMOKE);
@@ -82,7 +75,7 @@ public class View {
 
         PathTransition transition = new PathTransition();
         transition.setNode(a.getAnt());
-        transition.setDuration(Duration.millis(400));
+        transition.setDuration(Duration.millis(200));
         transition.setPath(path);
         transition.setCycleCount(1);
         return transition;

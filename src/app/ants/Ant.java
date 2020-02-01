@@ -18,22 +18,27 @@ class Ant
         while ((currentVertex != endVertex) && (edgesTraversed++ < ModelParameters.LONGEST_PATH_CUT_OFF_POINT)) {
 
             Edge finalLastEdge = lastEdge;
-            double edgesSum = currentVertex.getConnectedVertices().stream().mapToDouble(pair ->
-            {
-                if (pair.getValue() != finalLastEdge)
+            double edgesSum = currentVertex.getConnectedVertices().stream().mapToDouble(pair -> {
+                if (pair.getValue() != finalLastEdge) {
                     return pair.getValue().getPheromones() * pair.getValue().getWeight();
-                else return 0.0;
+                } else {
+                    return 0.0;
+                }
             }).sum();
             double randomUniformWeightedDouble = ModelParameters.randomGenerator.nextDouble() * edgesSum;
 
             Pair<Vertex, Edge> nextVertexEdge = null;
             for (int i = 0; i < currentVertex.getConnectedVertices().size(); ++i) {
-                if (currentVertex.getConnectedVertices().get(i).getValue() == lastEdge) continue;
+                if (currentVertex.getConnectedVertices().get(i).getValue() == lastEdge) {
+                    continue;
+                }
                 double threshold = currentVertex.getConnectedVertices().get(i).getValue().getPheromones() * currentVertex.getConnectedVertices().get(i).getValue().getWeight();
                 if (randomUniformWeightedDouble <= threshold) {
                     nextVertexEdge = currentVertex.getConnectedVertices().get(i);
                     break;
-                } else randomUniformWeightedDouble -= currentVertex.getConnectedVertices().get(i).getValue().getPheromones() * currentVertex.getConnectedVertices().get(i).getValue().getWeight();
+                } else {
+                    randomUniformWeightedDouble -= currentVertex.getConnectedVertices().get(i).getValue().getPheromones() * currentVertex.getConnectedVertices().get(i).getValue().getWeight();
+                }
             }
             assert (nextVertexEdge != null);
             path.add(nextVertexEdge);
